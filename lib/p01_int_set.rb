@@ -2,8 +2,7 @@ class MaxIntSet
 
   attr_reader :store
   def initialize(max)
-    @max = max + 1
-    @store = Array.new(@max, false)
+    @store = Array.new(max, false)
   end
 
   def insert(num)
@@ -24,7 +23,7 @@ class MaxIntSet
   private
 
   def is_valid?(num)
-    return true if num < @store.length && num >= 0
+    return true if num.between?(0, @store.length - 1)
     raise "Out of bounds"
     false
   end
@@ -44,16 +43,15 @@ class IntSet
 
   def insert(num)
     return if include?(num)
-    @store[num % num_buckets] = true
+    self[num].push(num)
   end
 
   def remove(num)
-    @store[num % num_buckets] = false if include?(num)
+   self[num].delete(num) if include?(num)
   end
 
   def include?(num)
-    return true if self[num] == true
-    false
+    self[num].include?(num)
   end
 
   private
@@ -77,17 +75,27 @@ class ResizingIntSet
   end
 
   def insert(num)
+    return if include?(num)
+    resize! if num_buckets == @count
+    @count += 1
+    self[num].push(num)
   end
 
   def remove(num)
+    if include?(num)
+      self[num].delete(num)
+      @count -= 1
+    end
   end
 
   def include?(num)
+    self[num].include?(num)
   end
 
   private
 
   def [](num)
+    @store[num % num_buckets]
     # optional but useful; return the bucket corresponding to `num`
   end
 
@@ -96,5 +104,14 @@ class ResizingIntSet
   end
 
   def resize!
+    nums = []
+    @store.each do |buckets|
+      buckets.each do |number|
+        nums << number
+        self.remove(number)
+      end
+    end
+    @store.concat(Array.new(num_buckets) {Array.new})
+    nums.each { |num| self.insert(num)}
   end
 end
