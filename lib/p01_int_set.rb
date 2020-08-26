@@ -43,17 +43,23 @@ class IntSet
   end
 
   def insert(num)
+    return if include?(num)
+    @store[num % num_buckets] = true
   end
 
   def remove(num)
+    @store[num % num_buckets] = false if include?(num)
   end
 
   def include?(num)
+    return true if self[num] == true
+    false
   end
 
   private
 
   def [](num)
+    @store[num % num_buckets]
     # optional but useful; return the bucket corresponding to `num`
   end
 
