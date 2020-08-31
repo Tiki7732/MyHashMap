@@ -28,6 +28,10 @@ class LinkedList
   attr_reader :head, :tail
 
   def initialize
+    @head = Node.new
+    @tail = Node.new
+    @head.next = @tail
+    @tail.prev = @head
   end
 
   def [](i)
@@ -36,12 +40,15 @@ class LinkedList
   end
 
   def first
+    empty? ? nil : self.head.next
   end
 
   def last
+    empty? ? nil : self.tail.prev
   end
 
   def empty?
+    return true if self.head.next == self.tail
   end
 
   def get(key)
