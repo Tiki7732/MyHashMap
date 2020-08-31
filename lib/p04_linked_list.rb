@@ -48,7 +48,7 @@ class LinkedList
   end
 
   def empty?
-    return true if self.head.next == self.tail
+    self.head.next == self.tail
   end
 
   def get(key)
@@ -58,6 +58,12 @@ class LinkedList
   end
 
   def append(key, val)
+    new_node = Node.new(key, val)
+    self.tail.prev.next = new_node
+    self.tail.prev = new_node
+    new_node.prev = self.tail.prev
+    new_node.next = self.tail
+    new_node
   end
 
   def update(key, val)
@@ -67,10 +73,15 @@ class LinkedList
   end
 
   def each
+    current_node = self.head.next
+    until current_node == self.tail
+      yield current_node
+      current_node = current_node.next
+    end
   end
 
   # uncomment when you have `each` working and `Enumerable` included
-  # def to_s
-  #   inject([]) { |acc, link| acc << "[#{link.key}, #{link.val}]" }.join(", ")
-  # end
+  def to_s
+    inject([]) { |acc, link| acc << "[#{link.key}, #{link.val}]" }.join(", ")
+  end
 end
