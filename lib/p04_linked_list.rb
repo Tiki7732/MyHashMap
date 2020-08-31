@@ -14,12 +14,19 @@ class Node
   end
 
   def remove
+    self.prev.next = self.next if self.next
+    self.next.prev = self.prev if self.prev
+    self.next = nil
+    self.prev = nil
     # optional but useful, connects previous link to next link
     # and removes self from list.
   end
 end
 
 class LinkedList
+  include Enumerable
+  attr_reader :head, :tail
+
   def initialize
   end
 
