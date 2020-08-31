@@ -14,10 +14,13 @@ class Node
   end
 
   def remove
-    self.prev.next = self.next if self.next
-    self.next.prev = self.prev if self.prev
+    self.prev.next = self.next if self.prev
+    self.next.prev = self.prev if self.next
     self.next = nil
     self.prev = nil
+
+    p "removed"
+    self
     # optional but useful, connects previous link to next link
     # and removes self from list.
   end
@@ -52,9 +55,14 @@ class LinkedList
   end
 
   def get(key)
+    self.each do |node|
+      return node.val if node.key == key
+    end
+    nil
   end
 
   def include?(key)
+    any? {|node| node.key == key}
   end
 
   def append(key, val)
@@ -67,9 +75,26 @@ class LinkedList
   end
 
   def update(key, val)
+    self.each do |node|
+      node.val = val if node.key == key
+      return node
+    end
   end
 
   def remove(key)
+    each do |node|
+      if node.key == key
+        p self.to_s
+        p "+++++"
+        p node.val
+        node.remove
+     
+        p self.to_s
+        return node.val
+      end
+    end
+
+    nil
   end
 
   def each
