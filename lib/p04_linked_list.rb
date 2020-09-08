@@ -18,8 +18,6 @@ class Node
     self.next.prev = self.prev if self.next
     self.next = nil
     self.prev = nil
-
-    p "removed"
     self
     # optional but useful, connects previous link to next link
     # and removes self from list.
@@ -68,9 +66,9 @@ class LinkedList
   def append(key, val)
     new_node = Node.new(key, val)
     self.tail.prev.next = new_node
-    self.tail.prev = new_node
     new_node.prev = self.tail.prev
     new_node.next = self.tail
+    self.tail.prev = new_node
     new_node
   end
 
@@ -81,15 +79,10 @@ class LinkedList
     end
   end
 
-  def remove(key)
+   def remove(key)
     each do |node|
       if node.key == key
-        p self.to_s
-        p "+++++"
-        p node.val
         node.remove
-     
-        p self.to_s
         return node.val
       end
     end
