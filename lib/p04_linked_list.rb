@@ -72,10 +72,13 @@ class LinkedList
     new_node
   end
 
-  def update(key, val)
-    self.each do |node|
-      node.val = val if node.key == key
-      return node
+
+    def update(key, val)
+    each do |node|
+      if node.key == key
+        node.val = val
+        return node
+      end
     end
   end
 
