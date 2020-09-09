@@ -2,6 +2,9 @@ require_relative 'p05_hash_map'
 require_relative 'p04_linked_list'
 
 class LRUCache
+
+  attr_reader :map, :prc, :max
+
   def initialize(max, prc)
     @map = HashMap.new
     @store = LinkedList.new
@@ -14,6 +17,8 @@ class LRUCache
   end
 
   def get(key)
+    if @map.include?(key)
+
   end
 
   def to_s
@@ -23,13 +28,22 @@ class LRUCache
   private
 
   def calc!(key)
+    val = @prc.call(key)
+    new_node = @store.append(key, val)
+    @map[key] = new_node
+    eject! if count > @max
     # suggested helper method; insert an (un-cached) key
   end
 
   def update_node!(node)
+    node.remove
+    @map[node.key] = store.append(node.key, node.val)
     # suggested helper method; move a node to the end of the list
   end
 
   def eject!
+    oldest = @store.first
+    oldest.remove
+    @map.delete(oldest.key)
   end
 end
